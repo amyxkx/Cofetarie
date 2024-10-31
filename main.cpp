@@ -109,28 +109,12 @@ public:
     // const std::vector<Ornament>& getOrnaments() const {
     //     return ornaments;
     // }
-
-    void displaySummary() const {
-        std::cout << "Flavor of the cake base: " << flavor << std::endl;
-        std::cout << "Number of tiers: " << tiers << std::endl;
-        std::cout << "Weight of the cake (edible): " << weight_without_ornaments << " grams" << std::endl;
-        std::cout << "Covering cream: " << cream << std::endl;
-        std::cout << "Price per kg: " << price_per_kg << std::endl;
-        std::cout << "Ornaments (on top of cake): ";
-        for (const auto& ornm : ornaments) {
-            std::cout << ornm.getName() << " "<<std::endl;
-        }
-        std::cout << "Does it contain sugar? " << (isSugarfree() ? " no" : " yes") << "\n";
-        std::cout << "Is it gluten free? " << (isGlutenfree() ? " yes" : " no") << "\n";
-        std::cout << std::endl;
-    }
-
     void TotalWeight() const {
         float total_weight = this->weight_without_ornaments;
         for (const auto& ornm : ornaments) {
             total_weight += ornm.getAmount();
         }
-        std::cout << "Total weight for the cake is: " << total_weight << std::endl;
+        std::cout << "Total weight for the cake is: " << total_weight << " killograms "<< std::endl;
     }
 
     void CostOfCake() const {
@@ -140,6 +124,27 @@ public:
         }
         std::cout << "Cost of Cake with ornaments: " << price << std::endl;
     }
+
+    void displaySummary() const {
+        std::cout << "Flavor of the cake base: " << flavor << std::endl;
+        std::cout << "Number of tiers: " << tiers << std::endl;
+        std::cout << "Weight of the cake (edible): " << weight_without_ornaments << " killograms" << std::endl;
+        std::cout << "Covering cream: " << cream << std::endl;
+        std::cout << "Price per kg: " << price_per_kg << std::endl;
+        std::cout << "How many tiers does the cake have? "<<tiers<<std::endl;
+        std::cout << "Ornaments (on top of cake): ";
+        for (const auto& ornm : ornaments) {
+            std::cout << ornm.getName() << " "<<std::endl;
+        }
+        std::cout <<"\n";
+        std::cout << "Does it contain sugar? " << (isSugarfree() ? " no" : " yes") << "\n";
+        std::cout << "Is it gluten free? " << (isGlutenfree() ? " yes\n" : " no\n") << "\n";
+        std::cout << "All cakes have carefully chosen details that add to the weight and the price of the cake. Here are some more details: \n\n";
+        TotalWeight();
+        CostOfCake();
+        std::cout << std::endl;
+    }
+
 };
 
 class Order {
@@ -211,9 +216,9 @@ public:
     //     return OrderAddress;
     // }
 
-    [[nodiscard]] const Order& getOrder() const {
-        return order;
-    }
+    // [[nodiscard]] const Order& getOrder() const {
+    //     return order;
+    // }
 
     friend std::ostream& operator<<(std::ostream& os, const Client& cust) {
         os << "Customer: " << cust.name << ", Phone: " << cust.phoneNumber << " Email: " << cust.EmailAddress << " Address: " << cust.OrderAddress << std::endl;
@@ -256,22 +261,22 @@ void displayWelcomeMessage(  ) {
     }
     std::cout << word << "                *\n";
 
-    std::cout << "---------------------------------------------------------\n";
-    std::cout << "*********************************************************\n";
-    std::cout << "*                                                       *\n";
-    std::cout << "*                        *   *   *                      *\n";
-    std::cout << "*                        |   |   |                      *\n";
-    std::cout << "*                     ~~~~~~~~~~~~~~~                   *\n";
-    std::cout << "*                    |we all love cake|                 *\n";
-    std::cout << "*                    ******************                 *\n";
-    std::cout << "*                   |     *      *     |                *\n";
-    std::cout << "*                  **********************               *\n";
-    std::cout << "*                 |      *   * *   *     |              *\n";
-    std::cout << "*                 ************************              *\n";
-    std::cout << "*                | *       *     *      * |             *\n";
-    std::cout << "*                |     *      *     *     |             *\n";
-    std::cout << "*********************************************************\n";
-    std::cout << "---------------------------------------------------------\n";
+    std::cout << "---------------------------------------------------------\n"
+     << "*********************************************************\n"
+     << "*                                                       *\n"
+     << "*                        *   *   *                      *\n"
+     << "*                        |   |   |                      *\n"
+     << "*                     ~~~~~~~~~~~~~~~                   *\n"
+     << "*                    |we all love cake|                 *\n"
+     << "*                    ******************                 *\n"
+     << "*                   |     *      *     |                *\n"
+     << "*                  **********************               *\n"
+     << "*                 |      *   * *   *     |              *\n"
+     << "*                 ************************              *\n"
+     << "*                | *       *     *      * |             *\n"
+     << "*                |     *      *     *     |             *\n"
+     << "*********************************************************\n"
+     << "---------------------------------------------------------\n";
 }
 void displayOrderMessage( const std::vector<CakeDetails>& cakes  ) {
     std::cout << "         Would you like to place an order? yes/no: ";
