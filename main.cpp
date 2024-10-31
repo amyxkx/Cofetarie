@@ -66,13 +66,13 @@ public:
     : CakeName(cknm), flavor(flv), cream(std::move(cr)), message(msg), ornaments(ornm), tiers(t),
       days_until_expiration(days), weight_without_ornaments(w), price_per_kg(price), sugarfree(nosugar), glutenfree(nogluten) {}
 
-    // [[nodiscard]] bool isSugarfree() const {
-    //     return sugarfree;
-    // }
-    //
-    // [[nodiscard]] bool isGlutenfree() const {
-    //     return glutenfree;
-    // }
+    [[nodiscard]] bool isSugarfree() const {
+        return sugarfree;
+    }
+
+    [[nodiscard]] bool isGlutenfree() const {
+        return glutenfree;
+    }
 
     // [[nodiscard]] const std::string& getCakeName() const {
     //     return CakeName;
@@ -118,8 +118,10 @@ public:
         std::cout << "Price per kg: " << price_per_kg << std::endl;
         std::cout << "Ornaments (on top of cake): ";
         for (const auto& ornm : ornaments) {
-            std::cout << ornm.getName() << " ";
+            std::cout << ornm.getName() << " "<<std::endl;
         }
+        std::cout << "Does it contain sugar? " << (isSugarfree() ? " no" : " yes") << "\n";
+        std::cout << "Is it gluten free? " << (isGlutenfree() ? " yes" : " no") << "\n";
         std::cout << std::endl;
     }
 
