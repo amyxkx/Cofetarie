@@ -78,33 +78,33 @@ public:
     //     return CakeName;
     // }
 
-    // [[nodiscard]] const std::string& getFlavor() const {
-    //     return flavor;
-    // }
+    [[nodiscard]] const std::string& getFlavor() const {
+        return flavor;
+    }
 
-    // [[nodiscard]] const std::string& getCream() const {
-    //     return cream;
-    // }
+    [[nodiscard]] const std::string& getCream() const {
+        return cream;
+    }
 
     [[nodiscard]] int getTiers() const {
         return tiers;
     }
 
-    // [[nodiscard]] float getWeight() const {
-    //     return weight_without_ornaments;
-    // }
+    [[nodiscard]] float getWeight() const {
+        return weight_without_ornaments;
+    }
 
-    // [[nodiscard]] float getPricePerKg() const {
-    //     return price_per_kg;
-    // }
+    [[nodiscard]] float getPricePerKg() const {
+        return price_per_kg;
+    }
 
-    // [[nodiscard]] const std::string& getMessage() const {
-    //     return message;
-    // }
+    [[nodiscard]] const std::string& getMessage() const {
+        return message;
+    }
 
-    // [[nodiscard]] int getDaysUntilExpiration() const {
-    //     return days_until_expiration;
-    // }
+    [[nodiscard]] int getDaysUntilExpiration() const {
+        return days_until_expiration;
+    }
 
     // const std::vector<Ornament>& getOrnaments() const {
     //     return ornaments;
@@ -126,12 +126,13 @@ public:
     }
 
     void displaySummary() const {
-        std::cout << "Flavor of the cake base: " << flavor << std::endl;
-        std::cout << "Number of tiers: " << tiers << std::endl;
-        std::cout << "Weight of the cake (edible): " << weight_without_ornaments << " killograms" << std::endl;
-        std::cout << "Covering cream: " << cream << std::endl;
-        std::cout << "Price per kg: " << price_per_kg << std::endl;
-        std::cout << "How many tiers does the cake have? "<<tiers<<std::endl;
+        std::cout << "Flavor of the cake base: " << getFlavor() << std::endl;
+        std::cout << "Number of tiers: " << getTiers() << std::endl;
+        std::cout << "Weight of the cake (edible): " << getWeight() << " killograms" << std::endl;
+        std::cout << "Covering cream: " << getCream() << std::endl;
+        std::cout << "Price per kg: " << getPricePerKg() << std::endl;
+        std::cout << "Days until expiration: " << getDaysUntilExpiration() << std::endl;
+        std::cout << "Message on the cake(can be changed if requested) : " << getMessage() << std::endl;
         std::cout << "Ornaments (on top of cake): ";
         for (const auto& ornm : ornaments) {
             std::cout << ornm.getName() << " "<<std::endl;
