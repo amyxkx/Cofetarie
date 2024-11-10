@@ -16,7 +16,7 @@ class Ornament {
 public:
     Ornament(std::string  n, float amnt, float p ) : name(std::move(n)), amount(amnt), price(p) {}
 
-    Ornament(const Ornament& other) : name(other.name), amount(other.amount), price(other.price) {}
+    Ornament(const Ornament& other) =default;
 
     Ornament& operator=(const Ornament& other) {
         if (this != &other) {
@@ -39,7 +39,7 @@ public:
         return price;
     }
 
-    ~Ornament() {}
+    ~Ornament()=default;
 
     friend std::ostream& operator<<(std::ostream& os, const Ornament& ornm) {
         os << ornm.name << " (" << ornm.amount << " grams)";
@@ -61,7 +61,7 @@ class CakeDetails {
     bool glutenfree;
 
 public:
-    CakeDetails(const std::string &cknm, const std::string& flv, std::string cr, const std::string& msg,
+    CakeDetails(const std::string  &cknm, const std::string& flv, std::string cr, const std::string& msg,
              const std::vector<Ornament>& ornm, int t, int days, float w, float price , bool nosugar, bool nogluten)
     : CakeName(cknm), flavor(flv), cream(std::move(cr)), message(msg), ornaments(ornm), tiers(t),
       days_until_expiration(days), weight_without_ornaments(w), price_per_kg(price), sugarfree(nosugar), glutenfree(nogluten) {}
@@ -74,65 +74,38 @@ public:
         return glutenfree;
     }
 
-    // [[nodiscard]] const std::string& getCakeName() const {
-    //     return CakeName;
-    // }
-
-    [[nodiscard]] const std::string& getFlavor() const {
-        return flavor;
+    [[nodiscard]] const std:: string & getCakeName() const {
+        return CakeName;
     }
 
-    [[nodiscard]] const std::string& getCream() const {
-        return cream;
-    }
-
-    [[nodiscard]] int getTiers() const {
-        return tiers;
-    }
-
-    [[nodiscard]] float getWeight() const {
-        return weight_without_ornaments;
-    }
-
-    [[nodiscard]] float getPricePerKg() const {
+    [[nodiscard]] const float  & getPrice() const {
         return price_per_kg;
     }
-
-    [[nodiscard]] const std::string& getMessage() const {
-        return message;
+    [[nodiscard]] const float  & getWeight() const {
+        return weight_without_ornaments;
     }
-
-    [[nodiscard]] int getDaysUntilExpiration() const {
-        return days_until_expiration;
-    }
-
-    // const std::vector<Ornament>& getOrnaments() const {
-    //     return ornaments;
-    // }
-    void TotalWeight() const {
-        float total_weight = this->weight_without_ornaments;
+    float TotalWeight( float  total_weight) const {
         for (const auto& ornm : ornaments) {
             total_weight += ornm.getAmount();
         }
-        std::cout << "Total weight for the cake is: " << total_weight << " killograms "<< std::endl;
+        return total_weight;
     }
 
-    void CostOfCake() const {
-        float price = this->weight_without_ornaments * this->price_per_kg;
+    float CostOfCake(float price) const {
         for (const auto& ornm : ornaments) {
             price += ornm.getPrice();
         }
-        std::cout << "Cost of Cake with ornaments: " << price << std::endl;
+        return price;
     }
 
     void displaySummary() const {
-        std::cout << "Flavor of the cake base: " << getFlavor() << std::endl;
-        std::cout << "Number of tiers: " << getTiers() << std::endl;
-        std::cout << "Weight of the cake (edible): " << getWeight() << " killograms" << std::endl;
-        std::cout << "Covering cream: " << getCream() << std::endl;
-        std::cout << "Price per kg: " << getPricePerKg() << std::endl;
-        std::cout << "Days until expiration: " << getDaysUntilExpiration() << std::endl;
-        std::cout << "Message on the cake(can be changed if requested) : " << getMessage() << std::endl;
+        std::cout << "Flavor of the cake base: " << this->flavor << std::endl;
+        std::cout << "Number of tiers: " << this->tiers << std::endl;
+        std::cout << "Weight of the cake (edible): " << this->weight_without_ornaments << " killograms" << std::endl;
+        std::cout << "Covering cream: " << this->cream << std::endl;
+        std::cout << "Price per kg: " << this->price_per_kg << std::endl;
+        std::cout << "Days until expiration: " << this->days_until_expiration << std::endl;
+        std::cout << "Message on the cake(can be changed if requested) : " << this->message << std::endl;
         std::cout << "Ornaments (on top of cake): ";
         for (const auto& ornm : ornaments) {
             std::cout << ornm.getName() << " "<<std::endl;
@@ -141,12 +114,47 @@ public:
         std::cout << "Does it contain sugar? " << (isSugarfree() ? " no" : " yes") << "\n";
         std::cout << "Is it gluten free? " << (isGlutenfree() ? " yes\n" : " no\n") << "\n";
         std::cout << "All cakes have carefully chosen details that add to the weight and the price of the cake. Here are some more details: \n\n";
-        TotalWeight();
-        CostOfCake();
-        std::cout << std::endl;
-    }
+        std::cout << "Total weight for the cake is: " << TotalWeight(this->weight_without_ornaments ) << " killograms "<< std::endl;
+        std::cout << "Final price for the cake is: " << CostOfCake(this->weight_without_ornaments * this->price_per_kg) << " lei "<< std::endl;
+    };
 
+    friend std::ostream& operator<<(std::ostream& os, const CakeDetails& details) {
+        os << "Cake Name: " << details.CakeName << "\n"
+           << "Flavor: " << details.flavor << "\n"
+           << "Cream: " << details.cream << "\n"
+           << "Message: " << details.message << "\n"
+           << "Tiers: " << details.tiers << "\n"
+           << "Days Until Expiration: " << details.days_until_expiration << "\n"
+           << "Weight (without ornaments): " << details.weight_without_ornaments << " kg\n"
+           << "Price per kg: " << details.price_per_kg << " lei\n"
+           << "Sugar-Free: " << (details.sugarfree ? "Yes" : "No") << "\n"
+           << "Gluten-Free: " << (details.glutenfree ? "Yes" : "No") << "\n"
+           << "Ornaments: ";
+        for (const auto& ornm : details.ornaments) {
+            os << ornm << " "; // This uses the Ornament's overloaded operator<<
+        }
+        os << "\n";
+        return os;
+    }
 };
+
+
+class Cake {
+private:
+   CakeDetails details;
+
+public:
+    Cake(const CakeDetails& custom) : details(custom) {}
+
+    const CakeDetails& getCakeDetails() const { return details; }
+
+
+    friend std::ostream& operator<<(std::ostream& os, const Cake& cake) {
+        os << cake.details; // This will now use CakeDetails's overloaded operator<<
+        return os;
+    }
+};
+
 
 class Order {
     int orderID;
@@ -177,9 +185,8 @@ public:
         return payment;
     }
 
-    ~Order() {
-        std::cout << "Order destructor for number: " << orderID << std::endl;
-    }
+    ~Order() =default;
+
 
     friend std::ostream& operator<<(std::ostream& os, const Order& order){
         os << "Order ID: " << order.getOrderID() << " Cake: ";
@@ -201,31 +208,108 @@ public:
     Client(std::string nm, std::string phone, std::string adrs, std::string email, const Order &ord)
     : name(std::move(nm)), phoneNumber(std::move(phone)), OrderAddress(std::move(adrs)), EmailAddress(std::move(email)), order(ord) {}
 
-    [[nodiscard]] const std::string& getName() const {
-        return name;
+    void placeOrder(const std::vector<CakeDetails>& cakes) {
+        std::cout << "*********************************************************\n"
+                  << "Thank you for taking an interest in Sweet Spell Bakery! \nWe make cakes out of love and passion\n"
+                  << "*********************************************************\n\n"
+                  << "Our current cake collection is:\n\n"
+                  << "*********************************************************\n"
+                  << "\n";
+
+        int aux = 1;
+        for (const auto& c : cakes) {
+            std::cout << "Option " << aux << ": " << c.getCakeName() << "\n";
+            aux++;
+        }
+
+        std::cout << "*********************************************************\n"
+                  << "\n\n"
+                  << "Which one would you like to order? (choose just the number <3): ";
+
+        int order_temp = getValidCakeSelection(cakes); // Using the helper function
+
+        clearScreen();
+
+        std::cout<<"---------------------------------------------------------\n"
+                 <<"*********************************************************\n"
+                 <<"\n     Amazing choice! It's one of our top sellers! :)\n\n"
+                 << "*********************************************************\n"
+                 <<"---------------------------------------------------------\n";
+
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+
+        clearScreen();
+
+        cakes[order_temp - 1].displaySummary();
+
+        //std::this_thread::sleep_for(std::chrono::seconds(10));
+        //clearScreen();
+
+
+        // Collect order details
+        std::string deliveryDate;
+        std::cout << "\nEnter delivery date (format: MM-DD): ";
+        std::cin >> deliveryDate;
+
+        int aux_paymentMethod;
+        std::string paymentMethod;
+        std::cout << "\nPlease choose a payment method  (Choose just the number)\n"
+                  << "(" << cakes[order_temp - 1].CostOfCake(   cakes[order_temp - 1].getPrice() * cakes[order_temp - 1].getWeight()  )<<") ron\n"
+                  << "Option 1: Cash on Delivery\n"
+                  << "Option 2: Online Payment by Card\n"
+                  << "Option 3: Bank Deposit\n";
+        std::cin >> aux_paymentMethod;
+
+        while (true) {
+            if (aux_paymentMethod == 1) {
+                paymentMethod = "Cash on Delivery";
+                std::cout << "You chose Cash on Delivery as payment method.\n";
+                break;
+            } else if (aux_paymentMethod == 2) {
+                paymentMethod = "Online Payment by Card";
+                std::cout << "You chose Online Payment by Card.\n";
+                break;
+            } else if (aux_paymentMethod == 3) {
+                paymentMethod = "Bank Deposit";
+                std::cout << "You chose Bank Deposit.\n";
+                break;
+            } else {
+                clearScreen();
+                std::cout << "\n ****** Invalid input.******  \n"
+                <<"Please select a valid paying method from 1 to 3: "
+                << "Option 1: Cash on Delivery\n"
+                << "Option 2: Online Payment by Card\n"
+                << "Option 3: Bank Deposit\n";
+                std::cin >> aux_paymentMethod;
+            }
+        }
+
+        Order newOrder( cakes[order_temp - 1], deliveryDate, paymentMethod );
+
+        this->order = newOrder;
+
+        std::cout << "\nOrder successfully placed! Thank you for supporting our business!\n";
     }
 
-    // [[nodiscard]] const std::string& getEmailAddress() const {
-    //     return EmailAddress;
-    // }
+    int getValidCakeSelection(const std::vector<CakeDetails>& cakes) {
+        int order_temp = 0;
+        std::cin >> order_temp;
 
-    // [[nodiscard]] const std::string& getPhoneNumber() const {
-    //     return phoneNumber;
-    // }
+        while (order_temp < 1 || order_temp > static_cast<int>(cakes.size())) {
+            std::cout << "\nInvalid selection. Please enter a number between 1 and " << cakes.size() << " :)\n";
+            std::cin >> order_temp;
+        }
 
-    // [[nodiscard]] const std::string& getAddress() const {
-    //     return OrderAddress;
-    // }
+        return order_temp;
+    }
 
-    // [[nodiscard]] const Order& getOrder() const {
-    //     return order;
-    // }
 
     friend std::ostream& operator<<(std::ostream& os, const Client& cust) {
         os << "Customer: " << cust.name << ", Phone: " << cust.phoneNumber << " Email: " << cust.EmailAddress << " Address: " << cust.OrderAddress << std::endl;
         return os;
     }
 };
+
 int Order::orderCounter = 0;
 
 void displayWelcomeMessage(  ) {
@@ -262,62 +346,22 @@ void displayWelcomeMessage(  ) {
     }
     std::cout << word << "                *\n";
 
-    std::cout << "---------------------------------------------------------\n"
-     << "*********************************************************\n"
-     << "*                                                       *\n"
-     << "*                        *   *   *                      *\n"
-     << "*                        |   |   |                      *\n"
-     << "*                     ~~~~~~~~~~~~~~~                   *\n"
-     << "*                    |we all love cake|                 *\n"
-     << "*                    ******************                 *\n"
-     << "*                   |     *      *     |                *\n"
-     << "*                  **********************               *\n"
-     << "*                 |      *   * *   *     |              *\n"
-     << "*                 ************************              *\n"
-     << "*                | *       *     *      * |             *\n"
-     << "*                |     *      *     *     |             *\n"
-     << "*********************************************************\n"
-     << "---------------------------------------------------------\n";
-}
-void displayOrderMessage( const std::vector<CakeDetails>& cakes  ) {
-    std::cout << "         Would you like to place an order? yes/no: ";
-    std::string s;
-    std::cin >> s;
-
-    if (s == "yes") {
-        clearScreen();
-        std::cout<<"*********************************************************\n"
-                << "Thank you for taking an intereset in Sweet Spell Bakery ! \n We make cakes out of love and passion\n"
-                << "*********************************************************\n\n"
-                << "Our current cake collection is:\n\n"
-                << "*********************************************************\n"
-                << "\n"
-                << "  1. Chocolate Birthday Monster\n"
-                << "  2. Vanilla Birthday Lover\n"
-                << "  3. Vanilla Wedding Dream\n"
-                << "  4. Carrot Cake\n"
-                << "  5. Classic Cheesecake Sugar&Gluten Free\n"
-                << "  6. Forest Fruit Cheesecake Sugar Free\n"
-                << "  7. Lemon Graduation Cake Sugar&Gluten Free\n"
-                << "  8. Congratulation Special: Red Velvet\n\n"
-                << "*********************************************************\n"
-                <<"\n"
-                << "Which one would you like to know more about? (choose just the number <3): ";
-
-        int order_temp = 0;
-        std::cin >> order_temp;
-
-        if (order_temp >= 1 && order_temp <= 8) {
-           std::cout<< "\nAmazing choice! It's one of our top sellers!\n\n";
-            cakes[order_temp - 1].displaySummary();
-        } else {
-            std::cout << "Invalid selection. Please enter a number between 1 and 8.\n";
-        }
-
-        std::cout << "\nThank you for visiting Sweet Spell Bakery!\n";
-    } else if (s == "no") {
-        std::cout << "\n Sorry to hear that but thank you for visiting Sweet Spell Bakery! See you soon! <3\n";
-    }
+    std::cout    << "---------------------------------------------------------\n"
+                 << "*********************************************************\n"
+                 << "*                                                       *\n"
+                 << "*                        *   *   *                      *\n"
+                 << "*                        |   |   |                      *\n"
+                 << "*                     ~~~~~~~~~~~~~~~                   *\n"
+                 << "*                    |we all love cake|                 *\n"
+                 << "*                    ******************                 *\n"
+                 << "*                   |     *      *     |                *\n"
+                 << "*                  **********************               *\n"
+                 << "*                 |      *   * *   *     |              *\n"
+                 << "*                 ************************              *\n"
+                 << "*                | *       *     *      * |             *\n"
+                 << "*                |     *      *     *     |             *\n"
+                 << "*********************************************************\n"
+                 << "---------------------------------------------------------\n";
 }
 
 void clearScreen() {
@@ -330,8 +374,6 @@ void clearScreen() {
 
 int main() {
      displayWelcomeMessage();
-
-     std::this_thread::sleep_for(std::chrono::seconds(3));
 
      clearScreen();
 
@@ -346,7 +388,7 @@ int main() {
      std::vector<Ornament> lemonOrnaments= {ornm2 };
      std::vector<Ornament> redVelvetOrnaments= {ornm2};
 
-     std::vector<CakeDetails> cakes = {
+    std::vector<CakeDetails> cakes = {
         CakeDetails("Chocolate Birthday Monster", "Chocolate", "Chocolate Ganache", "Happy Birthday (name and age)!",
             birthdayOrnaments, 1, 5, 2.0f, 100, false, false),
         CakeDetails("Vanilla Birthday Lover", "Vanilla", "Buttercream", "Happy Birthday (name and age)!",
@@ -365,7 +407,9 @@ int main() {
             redVelvetOrnaments, 2, 5, 3.0f, 130, false, false)
     };
 
-    displayOrderMessage( cakes );
+    Client client("John Doe", "123-456-789", "123 Cake St, Sweet City", "john@example.com", Order(cakes[0], "2024-12-25", "Credit Card"));
+
+    client.placeOrder(cakes);
 
     return 0;
 }
