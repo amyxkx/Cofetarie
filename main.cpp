@@ -14,7 +14,7 @@ class Ornament {
     float price; // per bucata
 
 public:
-    Ornament(std::string  n, float amnt, float p ) : name(std::move(n)), amount(amnt), price(p) {}
+    Ornament(std::string  n, const float amnt, const float p ) : name(std::move(n)), amount(amnt), price(p) {}
 
     Ornament(const Ornament& other) =default;
 
@@ -62,7 +62,7 @@ class CakeDetails {
 
 public:
     CakeDetails(const std::string  &cknm, const std::string& flv, std::string cr, const std::string& msg,
-             const std::vector<Ornament>& ornm, int t, int days, float w, float price , bool nosugar, bool nogluten)
+             const std::vector<Ornament>& ornm, const int t, const int days, const float w, const float price , const bool nosugar, const bool nogluten)
     : CakeName(cknm), flavor(flv), cream(std::move(cr)), message(msg), ornaments(ornm), tiers(t),
       days_until_expiration(days), weight_without_ornaments(w), price_per_kg(price), sugarfree(nosugar), glutenfree(nogluten) {}
 
@@ -84,14 +84,14 @@ public:
     [[nodiscard]] const float  & getWeight() const {
         return weight_without_ornaments;
     }
-    float TotalWeight( float  total_weight) const {
+    [[nodiscard]]float TotalWeight( float  total_weight) const {
         for (const auto& ornm : ornaments) {
             total_weight += ornm.getAmount();
         }
         return total_weight;
     }
 
-    float CostOfCake(float price) const {
+    [[nodiscard]]float CostOfCake(float price) const {
         for (const auto& ornm : ornaments) {
             price += ornm.getPrice();
         }
@@ -131,7 +131,7 @@ public:
            << "Gluten-Free: " << (details.glutenfree ? "Yes" : "No") << "\n"
            << "Ornaments: ";
         for (const auto& ornm : details.ornaments) {
-            os << ornm << " "; // This uses the Ornament's overloaded operator<<
+            os << ornm << " ";
         }
         os << "\n";
         return os;
@@ -140,13 +140,13 @@ public:
 
 
 class Cake {
-private:
+
     CakeDetails details;
 
 public:
     explicit Cake(const CakeDetails& custom) : details(custom) {}
 
-    const CakeDetails& getCakeDetails() const { return details; }
+    [[nodiscard]]const CakeDetails& getCakeDetails() const { return details; }
 
     friend std::ostream& operator<<(std::ostream& os, const Cake& cake) {
         os << cake.details; // This will now use CakeDetails's overloaded operator<<
@@ -197,7 +197,7 @@ public:
 };
 
 class Client {
-private:
+
     std::string name;
     std::string phoneNumber;
     std::string OrderAddress;
@@ -226,7 +226,7 @@ public:
                   << "\n\n"
                   << "Which one would you like to order? (choose just the number <3): ";
 
-        int order_temp = getValidCakeSelection(cakes); // Using the helper function
+        const int order_temp = getValidCakeSelection(cakes); // Using the helper function
 
         clearScreen();
 
@@ -261,19 +261,21 @@ public:
         std::cin >> aux_paymentMethod;
 
         while (true) {
-            if (aux_paymentMethod == 1) {
-                paymentMethod = "Cash on Delivery";
-                std::cout << "You chose Cash on Delivery as payment method.\n";
-                break;
-            } else if (aux_paymentMethod == 2) {
-                paymentMethod = "Online Payment by Card";
-                std::cout << "You chose Online Payment by Card.\n";
-                break;
-            } else if (aux_paymentMethod == 3) {
-                paymentMethod = "Bank Deposit";
-                std::cout << "You chose Bank Deposit.\n";
-                break;
-            } else {
+            if (aux_paymentMethod == 1 || aux_paymentMethod == 2|| aux_paymentMethod == 3) {
+                if (aux_paymentMethod == 1) {
+                    paymentMethod = "Cash on Delivery";
+                    std::cout << "You chose Cash on Delivery as payment method.\n";
+                    break;
+                } if (aux_paymentMethod == 2) {
+                    paymentMethod = "Online Payment by Card";
+                    std::cout << "You chose Online Payment by Card.\n";
+                    break;
+                }  if (aux_paymentMethod == 3) {
+                    paymentMethod = "Bank Deposit";
+                    std::cout << "You chose Bank Deposit.\n";
+                    break;
+                }
+            }else {
                 clearScreen();
                 std::cout << "\n ****** Invalid input.******  \n"
                 <<"Please select a valid paying method from 1 to 3: "
@@ -284,14 +286,14 @@ public:
             }
         }
 
-        Order newOrder( cakes[order_temp - 1], deliveryDate, paymentMethod );
+        const Order newOrder( cakes[order_temp - 1], deliveryDate, paymentMethod );
 
         this->order = newOrder;
 
         std::cout << "\nOrder successfully placed! Thank you for supporting our business!\n";
     }
 
-    int getValidCakeSelection(const std::vector<CakeDetails>& cakes) {
+    static int getValidCakeSelection(const std::vector<CakeDetails>& cakes) {
         int order_temp = 0;
         std::cin >> order_temp;
 
@@ -315,14 +317,14 @@ int Order::orderCounter = 0;
 void displayWelcomeMessage(  ) {
     std::string line1 = "        Welcome to";
     std::string line2 = "    Sweet Spell Bakery!";
-    int delay = 300;
+    constexpr int delay = 300;
 
     std::cout << "---------------------------------------------------------\n";
     std::cout << "*********************************************************\n";
     std::cout << "*                ";
     std::string word = "";
 
-    for (char caracter : line1) {
+    for (const char caracter : line1) {
         if (caracter == ' ') {
             std::cout << word << " ";
             std::this_thread::sleep_for(std::chrono::milliseconds(delay));
@@ -334,7 +336,7 @@ void displayWelcomeMessage(  ) {
     std::cout << "*                ";
     word = "";
 
-    for (char caracter : line2) {
+    for (const char caracter : line2) {
         if (caracter == ' ') {
             std::cout << word << " ";
             std::cout.flush();

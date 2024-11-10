@@ -210,9 +210,8 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ZIP_NAME }}_${{ env.TIMESTAMP }}
-          path: ${{ env.ZIP_NAME }}
-          retention-days: 30
+          path: ''
+
 
       - name: Runtime checks
         uses: ./.github/actions/runtime-checks
