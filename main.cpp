@@ -141,19 +141,19 @@ public:
 
 class Cake {
 private:
-   CakeDetails details;
+    CakeDetails details;
 
 public:
-    Cake(const CakeDetails& custom) : details(custom) {}
+    explicit Cake(const CakeDetails& custom) : details(custom) {}
 
     const CakeDetails& getCakeDetails() const { return details; }
-
 
     friend std::ostream& operator<<(std::ostream& os, const Cake& cake) {
         os << cake.details; // This will now use CakeDetails's overloaded operator<<
         return os;
     }
 };
+
 
 
 class Order {
