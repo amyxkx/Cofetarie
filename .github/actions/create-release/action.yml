@@ -1,7 +1,6 @@
 name: 'Create release'
 description: 'Create releases for tags'
 
-
 runs:
   using: "composite"
   steps:

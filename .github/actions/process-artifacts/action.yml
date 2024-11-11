@@ -1,7 +1,6 @@
 name: 'Process artifacts'
 description: 'Process artifact files'
 
-
 runs:
   using: "composite"
   steps:

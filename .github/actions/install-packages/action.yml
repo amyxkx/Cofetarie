@@ -1,7 +1,6 @@
 name: 'Install packages'
 description: 'Install required packages'
 
-
 runs:
   using: "composite"
   steps:
