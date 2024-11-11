@@ -9,9 +9,8 @@ runs:
       if: runner.os == 'Linux' && matrix.runs_msan == true
       id: cache-tools
       with:
-        key: ''
-        path: ''
-
+        path: tools
+        key: tools-clang-${{ matrix.clang_ver }}-stdlib-msan
 
     - name: Setup memory sanitizer
       shell: bash
@@ -39,9 +38,8 @@ runs:
       uses: actions/cache/save@v4
       if: runner.os == 'Linux' && matrix.runs_msan == true && steps.cache-tools.outputs.cache-hit != 'true'
       with:
-        key: ''
-        path: ''
-
+        path: tools
+        key: tools-clang-${{ matrix.clang_ver }}-stdlib-msan
 
     - name: Sanitizers
       shell: bash

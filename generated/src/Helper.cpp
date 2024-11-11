@@ -1,5 +1,5 @@
 #include <Helper.h>
 
-void Helper::help() {
+ void Helper::help() {
     // perform help
 }

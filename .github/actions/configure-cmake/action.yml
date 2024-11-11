@@ -30,26 +30,27 @@ runs:
       if: matrix.cmake_generator == 'Ninja'
       id: cache-deps-ninja
       with:
-        key: ''
-        path: ''
-
+        path: |
+          ${{ env.BUILD_DIR }}/.ninja_deps
+          ${{ env.BUILD_DIR }}/.ninja_log
+        key: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.asan_name }}-ninja-cache-${{ hashFiles('CMakeLists.txt') }}
+        restore-keys: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.asan_name }}-ninja-cache-
 
     - name: Cache MinGW
       uses: actions/cache@v4
       id: cache-mingw
       if: runner.os == 'Windows' && matrix.cxx == 'g++'
       with:
-        key: ''
-        path: ''
-
+        path: gcc
+        key: ${{ runner.os }}-${{ env.MINGW_VER }}
 
     - name: Download toolchain (MinGW)
       uses: suisei-cn/actions-download-file@v1.6.0
       id: download-mingw-gcc
       if: runner.os == 'Windows' && matrix.cxx == 'g++' && steps.cache-mingw.outputs.cache-hit != 'true'
       with:
-        url: ''
-
+        url: "https://github.com/brechtsanders/winlibs_mingw/releases/download/${{ env.MINGW_VER }}"
+        target: compiler/
 
     - name: Install toolchain (MinGW)
       shell: bash

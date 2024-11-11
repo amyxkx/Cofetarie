@@ -30,4 +30,4 @@ mv "cppcheck-${CPPCHECK_VER}" cppcheck
 
 cd cppcheck || { echo "Eroare cd"; exit 1; }
 cmake -S . -B "${CMAKE_BUILD_DIR}" -DEXTERNALS_AS_SYSTEM=ON "${CMAKE_OPTS[@]}"
-cmake --build "${CMAKE_BUILD_DIR}" -j6
+cmake --build "${CMAKE_BUILD_DIR}" --parallel 6
