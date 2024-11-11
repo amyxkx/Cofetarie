@@ -6,6 +6,7 @@
 #include <chrono>
 #include <thread>
 
+
 void clearScreen();
 
 class Ornament {
